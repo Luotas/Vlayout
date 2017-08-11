@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements FuncItemOnClickListener {
+public class MainActivity extends AppCompatActivity implements FuncItemOnClickListener ,LogoutClickListener{
 
     private RecyclerView workRecyclerView = null;
 
@@ -38,6 +39,22 @@ public class MainActivity extends AppCompatActivity implements FuncItemOnClickLi
         initData();
 
         initView();
+
+        initRvContent();
+    }
+
+    private void initRvContent() {
+
+        //添加ItemDecoration，item之间的间隔
+        int leftRight = dip2px(2);
+        int topBottom = dip2px(2);
+
+        workRecyclerView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom,getResources().getColor(R.color.back_color)));
+    }
+
+
+    public int dip2px(float dpValue) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getResources().getDisplayMetrics());
     }
 
     private void initData() {
@@ -99,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements FuncItemOnClickLi
         helperList.add(companyGridHelper);
 
         layoutManager.setLayoutHelpers(helperList);
-        workAdapter = new WorkAdapter(layoutManager, oneFuncs, twoFuncs, this);
+        workAdapter = new WorkAdapter(layoutManager, oneFuncs, twoFuncs, this,this);
 
         workRecyclerView.setAdapter(workAdapter);
 
@@ -116,4 +133,13 @@ public class MainActivity extends AppCompatActivity implements FuncItemOnClickLi
         //Toast.makeText(this, (String) listItem.get(postion).get("ItemTitle"), Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.login_out:
+                Log.i("VLayout","Logout TextView is clicked right now!");
+
+                Toast.makeText(this, "Logout TextView is clicked right now!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

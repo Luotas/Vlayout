@@ -27,16 +27,23 @@ public class WorkAdapter extends VirtualLayoutAdapter {
 
     public FuncItemOnClickListener listener;
 
+    public LogoutClickListener logoutClickListener;
+
     public static final int BANNER_VIEW_TYPE = 0;
     public static final int DIVIDER_VIEW_TYPE = 1;
     public static final int FUN_VIEW_TYPE = 2;
 
 
-    public WorkAdapter(@NonNull VirtualLayoutManager layoutManager, List<FunctionBean> oneFunctions, List<FunctionBean> twoFunctions, FuncItemOnClickListener listener) {
+    public WorkAdapter(@NonNull VirtualLayoutManager layoutManager,
+                       List<FunctionBean> oneFunctions,
+                       List<FunctionBean> twoFunctions,
+                       FuncItemOnClickListener listener,
+                       LogoutClickListener logoutClickListener) {
         super(layoutManager);
         this.oneFunctions = oneFunctions;
         this.twoFunctions = twoFunctions;
         this.listener = listener;
+        this.logoutClickListener = logoutClickListener;
 
         oneFuncs = oneFunctions.size();
         twoFuncs = twoFunctions.size();
@@ -77,7 +84,7 @@ public class WorkAdapter extends VirtualLayoutAdapter {
                 ((FuncViewHolder) holder).name.setText(fb.name);
                 ((FuncViewHolder) holder).image.setImageResource(fb.image);
             } else if (position > 2 + oneFuncs) {
-                FunctionBean fb = twoFunctions.get(position - 2 - oneFunctions.size());
+                FunctionBean fb = twoFunctions.get(position - 2 - 1 - oneFunctions.size());
                 ((FuncViewHolder) holder).name.setText(fb.name);
                 ((FuncViewHolder) holder).image.setImageResource(fb.image);
             }
@@ -115,11 +122,19 @@ public class WorkAdapter extends VirtualLayoutAdapter {
     class BannerViewHolder extends RecyclerView.ViewHolder {
 
         ImageView iv;
+        TextView tv;
 
         public BannerViewHolder(View view) {
             super(view);
 
+            tv = (TextView) view.findViewById(R.id.login_out);
             iv = (ImageView) view.findViewById(R.id.banner_image);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    logoutClickListener.onClick(v);
+                }
+            });
 
         }
     }

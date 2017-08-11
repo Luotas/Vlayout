@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/banner_image"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner"/>
+    <TextView
+        android:id="@+id/login_out"
+        android:layout_gravity="right"
+        android:text="注销"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:gravity="center"
+        android:drawablePadding="5dp"
+        android:drawableLeft="@drawable/login_out"
+        android:textSize="@dimen/font_middle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/bar"/>
-
-</LinearLayout>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="13dp"/>
+</RelativeLayout>
