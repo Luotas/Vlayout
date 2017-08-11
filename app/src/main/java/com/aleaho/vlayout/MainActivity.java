@@ -45,11 +45,15 @@ public class MainActivity extends AppCompatActivity implements FuncItemOnClickLi
 
     private void initRvContent() {
 
+        SeparatorDecoration itemDivider = new SeparatorDecoration.Builder(this)
+                .width(1)
+                .colorFromResources(R.color.back_color)
+                .build();
         //添加ItemDecoration，item之间的间隔
-        int leftRight = dip2px(2);
-        int topBottom = dip2px(2);
+//        int leftRight = dip2px(2);
+//        int topBottom = dip2px(2);
 
-        workRecyclerView.addItemDecoration(new SpacesItemDecoration(leftRight, topBottom,getResources().getColor(R.color.back_color)));
+        workRecyclerView.addItemDecoration(itemDivider);
     }
 
 
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements FuncItemOnClickLi
         GridLayoutHelper personGridHelper = new GridLayoutHelper(3);
         personGridHelper.setAutoExpand(false);
         personGridHelper.setWeights(new float[]{33, 33, 33});
+        personGridHelper.setAspectRatio(3);
         personGridHelper.setItemCount(oneFuncs.size());
         helperList.add(personGridHelper);
 
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements FuncItemOnClickLi
         companyGridHelper.setWeights(new float[]{33, 33, 33});
         companyGridHelper.setAutoExpand(false);
         companyGridHelper.setItemCount(twoFuncs.size());
+        companyGridHelper.setAspectRatio(3);
         helperList.add(companyGridHelper);
 
         layoutManager.setLayoutHelpers(helperList);
