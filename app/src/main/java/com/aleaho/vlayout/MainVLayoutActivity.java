@@ -1,5 +1,6 @@
 package com.aleaho.vlayout;
 
+import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOnClickListener ,LogoutClickListener{
+public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOnClickListener, LogoutClickListener {
 
     private RecyclerView workRecyclerView = null;
 
@@ -44,15 +45,25 @@ public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOn
 
     private void initRvContent() {
 
-        SeparatorDecoration itemDivider = new SeparatorDecoration.Builder(this)
-                .width(1)
-                .colorFromResources(R.color.back_color)
-                .build();
-        //添加ItemDecoration，item之间的间隔
-//        int leftRight = dip2px(2);
-//        int topBottom = dip2px(2);
+        //        SeparatorDecoration itemDivider = new SeparatorDecoration.Builder(this)
+        //                .width(1)
+        //                .colorFromResources(R.color.back_color)
+        //                .build();
+        //        //添加ItemDecoration，item之间的间隔
+        ////        int leftRight = dip2px(2);
+        ////        int topBottom = dip2px(2);
+        //
+        //        workRecyclerView.addItemDecoration(itemDivider);
 
-        workRecyclerView.addItemDecoration(itemDivider);
+
+        RecyclerView.ItemDecoration itemDecoration = new RecyclerView.ItemDecoration() {
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int position = ((VirtualLayoutManager.LayoutParams) view.getLayoutParams()).getViewPosition();
+                outRect.set(4, 4, 4, 4);
+            }
+        };
+
+
     }
 
 
@@ -121,7 +132,7 @@ public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOn
         helperList.add(companyGridHelper);
 
         layoutManager.setLayoutHelpers(helperList);
-        workAdapter = new WorkAdapter(layoutManager, oneFuncs, twoFuncs, this,this);
+        workAdapter = new WorkAdapter(layoutManager, oneFuncs, twoFuncs, this, this);
 
         workRecyclerView.setAdapter(workAdapter);
 
@@ -133,16 +144,16 @@ public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOn
     @Override
     public void onItemClick(View view, int postion) {
         System.out.println("点击了第" + postion + "行");
-        Log.i("VLayout","点击了第" + postion + "行");
+        Log.i("VLayout", "点击了第" + postion + "行");
 
         //Toast.makeText(this, (String) listItem.get(postion).get("ItemTitle"), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.login_out:
-                Log.i("VLayout","Logout TextView is clicked right now!");
+                Log.i("VLayout", "Logout TextView is clicked right now!");
 
                 Toast.makeText(this, "Logout TextView is clicked right now!", Toast.LENGTH_SHORT).show();
         }
