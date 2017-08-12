@@ -84,7 +84,7 @@ public class VLayoutActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         ;
         mFirstText = (TextView) findViewById(R.id.first);
         mLastText = (TextView) findViewById(R.id.last);
@@ -178,11 +178,6 @@ public class VLayoutActivity extends Activity {
                 @Override
                 public int getItemViewType(int position) {
                     return 1;
-                }
-
-                @Override
-                protected void onBindViewHolderWithOffset(MainViewHolder holder, int position, int offsetTotal) {
-
                 }
 
                 @Override

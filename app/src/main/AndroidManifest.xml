@@ -20,6 +20,7 @@
             android:name=".MainVLayoutActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".VLayoutActivity"/>
+        <activity android:name=".IndexActivity"/>
     </application>
 
 </manifest>

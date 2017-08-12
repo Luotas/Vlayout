@@ -14,11 +14,16 @@ public class RootActivity extends ListActivity {
     private String[] mTitles = new String[]{
             VLayoutActivity.class.getSimpleName(),
             MainVLayoutActivity.class.getSimpleName(),
+            MainActivity.class.getSimpleName(),
+            IndexActivity.class.getSimpleName(),
     };
 
     private Class[] mActivities = new Class[]{
             VLayoutActivity.class,
             MainVLayoutActivity.class,
+            MainActivity.class,
+            IndexActivity.class,
+
     };
 
     @Override
