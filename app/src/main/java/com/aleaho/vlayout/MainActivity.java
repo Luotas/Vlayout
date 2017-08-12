@@ -1,151 +1,126 @@
 package com.aleaho.vlayout;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.alibaba.android.vlayout.LayoutHelper;
+import com.alibaba.android.vlayout.VirtualLayoutAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.alibaba.android.vlayout.layout.DefaultLayoutHelper;
+import com.alibaba.android.vlayout.layout.FixLayoutHelper;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
-import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
-import com.alibaba.android.vlayout.layout.SingleLayoutHelper;
+import com.alibaba.android.vlayout.layout.ScrollFixLayoutHelper;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements FuncItemOnClickListener ,LogoutClickListener{
+/**
+ * Created by Administrator on 2017/8/12.
+ */
 
-    private RecyclerView workRecyclerView = null;
-
-    private VirtualLayoutManager layoutManager = null;
-    private List<LayoutHelper> helperList = null;
-
-    List<FunctionBean> oneFuncs;
-    List<FunctionBean> twoFuncs;
-    WorkAdapter workAdapter;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        workRecyclerView = (RecyclerView) findViewById(R.id.work_recyclerview);
 
-        initData();
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_view);
 
-        initView();
+        VirtualLayoutManager layoutManager = new VirtualLayoutManager(this);
 
-        initRvContent();
-    }
+        recyclerView.setLayoutManager(layoutManager);
 
-    private void initRvContent() {
+        //layoutManager.setReverseLayout(true);
 
-        SeparatorDecoration itemDivider = new SeparatorDecoration.Builder(this)
-                .width(1)
-                .colorFromResources(R.color.back_color)
-                .build();
-        //添加ItemDecoration，item之间的间隔
-//        int leftRight = dip2px(2);
-//        int topBottom = dip2px(2);
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.set(10, 10, 10, 10);
+            }
+        });
 
-        workRecyclerView.addItemDecoration(itemDivider);
-    }
+        final List<LayoutHelper> helpers = new LinkedList<>();
+
+        final GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(4);
+        gridLayoutHelper.setItemCount(25);
 
 
-    public int dip2px(float dpValue) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getResources().getDisplayMetrics());
-    }
+        final ScrollFixLayoutHelper scrollFixLayoutHelper = new ScrollFixLayoutHelper(FixLayoutHelper.TOP_RIGHT, 100, 100);
 
-    private void initData() {
-        oneFuncs = new ArrayList<FunctionBean>();
-        twoFuncs = new ArrayList<FunctionBean>();
+        helpers.add(DefaultLayoutHelper.newHelper(7));
+        helpers.add(scrollFixLayoutHelper);
+        helpers.add(DefaultLayoutHelper.newHelper(2));
+        helpers.add(gridLayoutHelper);
 
+        layoutManager.setLayoutHelpers(helpers);
 
-        for (int i = 0; i < 8; i++) {
-            oneFuncs.add(new FunctionBean("私人服务", R.drawable.home));
-            twoFuncs.add(new FunctionBean("公司服务", R.drawable.person));
-        }
-    }
+        recyclerView.setAdapter(
+                new VirtualLayoutAdapter(layoutManager) {
+                    @Override
+                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        return new MainViewHolder(new TextView(MainActivity.this));
+                    }
 
-    private void initView() {
+                    @Override
+                    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                        VirtualLayoutManager.LayoutParams layoutParams = new VirtualLayoutManager.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, 300);
+                        holder.itemView.setLayoutParams(layoutParams);
 
-        layoutManager = new VirtualLayoutManager(this);
-        workRecyclerView.setLayoutManager(layoutManager);
+                        ((TextView) holder.itemView).setText(Integer.toString(position));
 
-        /**
-         * 步骤2：设置组件复用回收池
-         * */
-        RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-        workRecyclerView.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 10);
+                        if (position == 7) {
+                            layoutParams.height = 60;
+                            layoutParams.width = 60;
+                        } else if (position > 35) {
+                            layoutParams.height = 200 + (position - 30) * 100;
+                        }
 
+                        if (position > 35) {
+                            holder.itemView.setBackgroundColor(0x66cc0000 + (position - 30) * 128);
+                        } else if (position % 2 == 0) {
+                            holder.itemView.setBackgroundColor(0xaa00ff00);
+                        } else {
+                            holder.itemView.setBackgroundColor(0xccff00ff);
+                        }
+                    }
 
-        helperList = new LinkedList<>();
+                    @Override
+                    public int getItemCount() {
+                        List<LayoutHelper> helpers = getLayoutHelpers();
+                        if (helpers == null) {
+                            return 0;
+                        }
+                        int count = 0;
+                        for (int i = 0, size = helpers.size(); i < size; i++) {
+                            count += helpers.get(i).getItemCount();
+                        }
+                        return count;
+                    }
+                });
 
-        //1.
-        //头部图片一项，使用SingleLayoutHelper
-        SingleLayoutHelper bannerLayoutHelper = new SingleLayoutHelper();
-        bannerLayoutHelper.setItemCount(1);
-        helperList.add(bannerLayoutHelper);
-
-        //2
-        //个人功能大标题
-        LinearLayoutHelper personTitleHelper = new LinearLayoutHelper();
-        personTitleHelper.setItemCount(1);
-        helperList.add(personTitleHelper);
-
-        //功能模块，主要为九宫格
-        GridLayoutHelper personGridHelper = new GridLayoutHelper(3);
-        personGridHelper.setAutoExpand(false);
-        personGridHelper.setWeights(new float[]{33, 33, 33});
-        personGridHelper.setAspectRatio(3);
-        personGridHelper.setItemCount(oneFuncs.size());
-        helperList.add(personGridHelper);
-
-        //公司功能大标题
-        LinearLayoutHelper companyTitleHelper = new LinearLayoutHelper();
-        companyTitleHelper.setItemCount(1);
-        helperList.add(companyTitleHelper);
-
-
-        //公司功能模块
-        GridLayoutHelper companyGridHelper = new GridLayoutHelper(3);
-        companyGridHelper.setWeights(new float[]{33, 33, 33});
-        companyGridHelper.setAutoExpand(false);
-        companyGridHelper.setItemCount(twoFuncs.size());
-        companyGridHelper.setAspectRatio(3);
-        helperList.add(companyGridHelper);
-
-        layoutManager.setLayoutHelpers(helperList);
-        workAdapter = new WorkAdapter(layoutManager, oneFuncs, twoFuncs, this,this);
-
-        workRecyclerView.setAdapter(workAdapter);
-
-
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.scrollToPosition(7);
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+        }, 6000);
     }
 
 
-    // 点击事件的回调函数
-    @Override
-    public void onItemClick(View view, int postion) {
-        System.out.println("点击了第" + postion + "行");
-        Log.i("VLayout","点击了第" + postion + "行");
+    static class MainViewHolder extends RecyclerView.ViewHolder {
 
-        //Toast.makeText(this, (String) listItem.get(postion).get("ItemTitle"), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.login_out:
-                Log.i("VLayout","Logout TextView is clicked right now!");
-
-                Toast.makeText(this, "Logout TextView is clicked right now!", Toast.LENGTH_SHORT).show();
+        public MainViewHolder(View itemView) {
+            super(itemView);
         }
     }
 }
