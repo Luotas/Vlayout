@@ -27,7 +27,7 @@ public class WorkAdapter extends VirtualLayoutAdapter {
 
     public FuncItemOnClickListener listener;
 
-    public LogoutClickListener logoutClickListener;
+    public BannerClickListener bannerClickListener;
 
     public static final int BANNER_VIEW_TYPE = 0;
     public static final int DIVIDER_VIEW_TYPE = 1;
@@ -38,12 +38,12 @@ public class WorkAdapter extends VirtualLayoutAdapter {
                        List<FunctionBean> oneFunctions,
                        List<FunctionBean> twoFunctions,
                        FuncItemOnClickListener listener,
-                       LogoutClickListener logoutClickListener) {
+                       BannerClickListener bannerClickListener) {
         super(layoutManager);
         this.oneFunctions = oneFunctions;
         this.twoFunctions = twoFunctions;
         this.listener = listener;
-        this.logoutClickListener = logoutClickListener;
+        this.bannerClickListener = bannerClickListener;
 
         oneFuncs = oneFunctions.size();
         twoFuncs = twoFunctions.size();
@@ -132,7 +132,7 @@ public class WorkAdapter extends VirtualLayoutAdapter {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    logoutClickListener.onClick(v);
+                    bannerClickListener.onClick(v);
                 }
             });
 

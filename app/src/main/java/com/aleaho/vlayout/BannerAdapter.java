@@ -2,9 +2,7 @@ package com.aleaho.vlayout;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,11 @@ import android.widget.TextView;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Administrator on 2017/8/12.
@@ -26,37 +29,46 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
     private LayoutHelper mLayoutHelper;
     private VirtualLayoutManager.LayoutParams mLayoutParams;
     private int mCount = 0;
+    private List<UserData> mData;
 
-    private LogoutClickListener logoutClickListener;
+    private BannerClickListener bannerClickListener;
 
 
     /**
-     * 初始化
+     * 初始化广告条布局
      *
-     * @param context
-     * @param layoutHelper
-     * @param count
+     * @param context      上下文
+     * @param layoutHelper 显示项目的布局类型
+     * @param data         显示项目的数据
      */
-    public BannerAdapter(Context context, LayoutHelper layoutHelper, int count) {
-        this(context, layoutHelper, count, new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
+    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserData> data) {
+        this(context, layoutHelper, data, new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
     }
 
     /**
-     * @param context
-     * @param layoutHelper
-     * @param count
-     * @param layoutParams
+     * 初始化广告条布局
+     *
+     * @param context      上线文
+     * @param layoutHelper 显示项目的布局类型
+     * @param data         显示项目的数据
+     * @param layoutParams 显示项目的布局信息
      */
-    public BannerAdapter(Context context, LayoutHelper layoutHelper, int count, @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
+    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserData> data, @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
         this.mContext = context;
         this.mLayoutHelper = layoutHelper;
-        this.mCount = count;
+        this.mData = data;
         this.mLayoutParams = layoutParams;
     }
 
 
-    public void setOnLogoutClick(LogoutClickListener l) {
-        this.logoutClickListener = l;
+    /**
+     * 注册一个回调函数，在单击视图时调用它。
+     * 主要为Banner界面上的头像按钮和注销按钮注册单击事件。
+     *
+     * @param l 回调时被执行的方法
+     */
+    public void setOnBannerViewClick(BannerClickListener l) {
+        this.bannerClickListener = l;
     }
 
 
@@ -70,11 +82,17 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
     @Override
     public void onBindViewHolder(BannerViewHolder holder, int position) {
 
+        UserData ud = mData.get(0);
+
+        holder.tvName.setText(ud.name);
+
+        Picasso.with(mContext).load(ud.avatarUrl).resize(80, 80).centerCrop().into(holder.civAvatar);
+
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        return mData.size();
     }
 
     @Override
@@ -85,21 +103,35 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
 
     class BannerViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView iv;
-        private TextView tv;
+        private ImageView ivBanner;
+        private TextView tvLogout;
+        private CircleImageView civAvatar;
+//        private ImageView civAvatar;
+        private TextView tvName;
 
         public BannerViewHolder(View itemView) {
             super(itemView);
 
-            iv = (ImageView) itemView.findViewById(R.id.banner_image);
-            tv = (TextView) itemView.findViewById(R.id.login_out);
+            ivBanner = (ImageView) itemView.findViewById(R.id.banner_image);
+            tvLogout = (TextView) itemView.findViewById(R.id.login_out);
+            civAvatar = (CircleImageView) itemView.findViewById(R.id.avatar);
+            tvName = (TextView) itemView.findViewById(R.id.nameView);
 
-            tv.setOnClickListener(new View.OnClickListener() {
+            tvLogout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (logoutClickListener != null) {
-                        logoutClickListener.onClick(v);
+                    if (bannerClickListener != null) {
+                        bannerClickListener.onClick(v);
+                    }
+                }
+            });
+
+            civAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (bannerClickListener != null) {
+                        bannerClickListener.onClick(v);
                     }
                 }
             });

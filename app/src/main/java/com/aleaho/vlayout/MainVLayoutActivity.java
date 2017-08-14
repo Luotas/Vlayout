@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOnClickListener, LogoutClickListener {
+public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOnClickListener, BannerClickListener {
 
     private RecyclerView workRecyclerView = null;
 
