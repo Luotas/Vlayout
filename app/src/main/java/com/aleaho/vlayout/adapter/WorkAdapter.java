@@ -1,4 +1,4 @@
-package com.aleaho.vlayout;
+package com.aleaho.vlayout.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aleaho.vlayout.Listener.BannerClickListener;
+import com.aleaho.vlayout.Listener.ItemOnClickListener;
+import com.aleaho.vlayout.R;
 import com.aleaho.vlayout.entity.FunctionEntity;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutAdapter;

@@ -1,4 +1,4 @@
-package com.aleaho.vlayout;
+package com.aleaho.vlayout.activity;
 
 import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
+import com.aleaho.vlayout.Listener.BannerClickListener;
+import com.aleaho.vlayout.Listener.ItemOnClickListener;
+import com.aleaho.vlayout.R;
+import com.aleaho.vlayout.adapter.WorkAdapter;
 import com.aleaho.vlayout.entity.FunctionEntity;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutManager;

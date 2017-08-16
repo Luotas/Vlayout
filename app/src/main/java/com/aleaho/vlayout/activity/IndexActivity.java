@@ -1,4 +1,4 @@
-package com.aleaho.vlayout;
+package com.aleaho.vlayout.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.aleaho.vlayout.Listener.BannerClickListener;
+import com.aleaho.vlayout.Listener.ItemOnClickListener;
+import com.aleaho.vlayout.R;
 import com.aleaho.vlayout.adapter.BannerAdapter;
 import com.aleaho.vlayout.adapter.MenuAdapter;
 import com.aleaho.vlayout.adapter.TitleAdapter;
@@ -20,8 +23,8 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
+import com.beardedhen.androidbootstrap.font.FontAwesome;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +38,7 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
 
     private RecyclerView indexRecyclerView;
     private VirtualLayoutManager layoutManager;
-    private List<UserEntity> userDatas;
+    private List<UserEntity> userData;
     private List<TitleEntity> titleData;
     private List<MenuEntity> menuData;
 
@@ -67,10 +70,10 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
         final List<DelegateAdapter.Adapter> adapters = new LinkedList<>();
 
 
-        createUserData();
+        createIndexData();
 
         //设置banner布局，主要用于显示用户信息以及相关状态按钮
-        BannerAdapter bannerAdapter = new BannerAdapter(this, new LinearLayoutHelper(), userDatas,
+        BannerAdapter bannerAdapter = new BannerAdapter(this, new LinearLayoutHelper(), userData,
                 new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
         bannerAdapter.setOnBannerViewClick(this);
         adapters.add(bannerAdapter);
@@ -95,17 +98,18 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
 
         adapters.add(menuAdapter);
 
+
         delegateAdapter.setAdapters(adapters);
 
 
     }
 
-    private void createUserData() {
-        userDatas = new ArrayList<UserEntity>();
+    private void createIndexData() {
+        userData = new ArrayList<UserEntity>();
 
 
-        userDatas.add(new UserEntity("杨杨",
-                "http://up.qqjia.com/z/face01/face06/facejunyong/junyong06.jpg"));
+        userData.add(new UserEntity("杨杨",
+                "http://uploads.xuexila.com/allimg/1608/704-160Q2092417.png"));
 
         titleData = new ArrayList<>();
         titleData.add(new TitleEntity("我的功能", R.drawable.title_image1, R.color.title_white));
@@ -113,14 +117,13 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
 
         menuData = new ArrayList<>();
 
-        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
-        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
-        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
-        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
-        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
-        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
-        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
-        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
+        menuData.add(new MenuEntity("位置查询", FontAwesome.FA_MAP_MARKER, MainActivity.class));
+        menuData.add(new MenuEntity("历史轨迹", FontAwesome.FA_ROAD, MainActivity.class));
+        menuData.add(new MenuEntity("签到签退", FontAwesome.FA_SIGN_IN, VLayoutActivity.class));
+        menuData.add(new MenuEntity("外出报备", FontAwesome.FA_SIGN_OUT, MainActivity.class));
+        menuData.add(new MenuEntity("工作日志", FontAwesome.FA_PENCIL_SQUARE_O, VLayoutActivity.class));
+        menuData.add(new MenuEntity("走访商户", FontAwesome.FA_FILE_TEXT_O, MainActivity.class));
+        menuData.add(new MenuEntity("商户列别", FontAwesome.FA_LIST, VLayoutActivity.class));
 
     }
 
@@ -148,7 +151,7 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
 
         Toast.makeText(this, menuData.get(postion - 2).name, Toast.LENGTH_SHORT).show();
 
-        Intent i = new Intent(this,menuData.get(postion - 2).toActivity);
+        Intent i = new Intent(this, menuData.get(postion - 2).toActivity);
         startActivity(i);
     }
 }

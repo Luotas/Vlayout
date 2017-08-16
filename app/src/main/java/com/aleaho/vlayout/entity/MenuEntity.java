@@ -4,21 +4,35 @@ package com.aleaho.vlayout.entity;
  * Created by Administrator on 2017/8/16.
  */
 
+/**
+ * 菜单数据结构
+ */
 public class MenuEntity {
 
     public String name;
-    public int image;
+    public String icon;
 
     public Class<?> toActivity;
 
-    public MenuEntity(String name, int image, Class<?> clazz) {
+    /**
+     * 初始化菜单选项
+     * @param name  菜单名称
+     * @param icon  菜单图标
+     * @param clazz 目标Activity
+     */
+    public MenuEntity(String name, String icon, Class<?> clazz) {
         this.name = name;
-        this.image = image;
+        this.icon = icon;
         this.toActivity = clazz;
     }
 
-    public MenuEntity(String name, int image) {
-        this(name, image, null);
+    /**
+     * 初始化菜单选项
+     * @param name  菜单名称
+     * @param icon  菜单图标
+     */
+    public MenuEntity(String name, String icon) {
+        this(name, icon, null);
     }
 
 

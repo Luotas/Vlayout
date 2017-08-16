@@ -1,6 +1,7 @@
 package com.aleaho.vlayout.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,14 +31,17 @@ public class TitleAdapter extends DelegateAdapter.Adapter<TitleAdapter.TitleView
 
     private VirtualLayoutManager.LayoutParams mLayoutParams;
 
-    public TitleAdapter(Context context, LayoutHelper layoutHelper, List<TitleEntity> datas) {
+    public TitleAdapter(Context context, LayoutHelper layoutHelper,
+                        List<TitleEntity> datas) {
 
         this(context, layoutHelper, datas,
                 new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 15));
     }
 
 
-    public TitleAdapter(Context context, LayoutHelper layoutHelper, List<TitleEntity> datas, VirtualLayoutManager.LayoutParams layoutParams) {
+    public TitleAdapter(Context context, LayoutHelper layoutHelper,
+                        List<TitleEntity> datas,
+                        @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
 
         this.mContext = context;
         this.mLayoutHelper = layoutHelper;

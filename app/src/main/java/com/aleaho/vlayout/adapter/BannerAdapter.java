@@ -3,13 +3,14 @@ package com.aleaho.vlayout.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.aleaho.vlayout.BannerClickListener;
+import com.aleaho.vlayout.Listener.BannerClickListener;
 import com.aleaho.vlayout.R;
 import com.aleaho.vlayout.entity.UserEntity;
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -44,8 +45,10 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
      * @param layoutHelper 显示项目的布局类型
      * @param data         显示项目的数据
      */
-    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserEntity> data) {
-        this(context, layoutHelper, data, new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
+    public BannerAdapter(Context context, LayoutHelper layoutHelper,
+                         List<UserEntity> data) {
+        this(context, layoutHelper, data,
+                new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
     }
 
     /**
@@ -56,7 +59,9 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
      * @param data         显示项目的数据
      * @param layoutParams 显示项目的布局信息
      */
-    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserEntity> data, @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
+    public BannerAdapter(Context context, LayoutHelper layoutHelper,
+                         List<UserEntity> data,
+                         @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
         this.mContext = context;
         this.mLayoutHelper = layoutHelper;
         this.mData = data;
@@ -86,11 +91,10 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
     public void onBindViewHolder(BannerViewHolder holder, int position) {
 
 
-
-
         UserEntity ud = mData.get(position);
-//        holder.itemView.setLayoutParams(mLayoutParams);
         holder.tvName.setText(ud.name);
+
+        Log.i("BannerAdapter", ud.avatarUrl);
 
         Picasso.with(mContext).load(ud.avatarUrl).resize(80, 80).centerCrop().into(holder.civAvatar);
 

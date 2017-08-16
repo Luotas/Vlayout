@@ -1,4 +1,4 @@
-package com.aleaho.vlayout;
+package com.aleaho.vlayout.activity;
 
 import android.app.ListActivity;
 import android.content.Intent;
