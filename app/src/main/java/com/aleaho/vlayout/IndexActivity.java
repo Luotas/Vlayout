@@ -10,10 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.aleaho.vlayout.adapter.BannerAdapter;
+import com.aleaho.vlayout.adapter.MenuAdapter;
+import com.aleaho.vlayout.adapter.TitleAdapter;
+import com.aleaho.vlayout.entity.MenuEntity;
+import com.aleaho.vlayout.entity.TitleEntity;
+import com.aleaho.vlayout.entity.UserEntity;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +30,14 @@ import java.util.List;
  * Created by Administrator on 2017/8/12.
  */
 
-public class IndexActivity extends AppCompatActivity implements BannerClickListener {
+public class IndexActivity extends AppCompatActivity implements BannerClickListener, ItemOnClickListener {
 
 
     private RecyclerView indexRecyclerView;
     private VirtualLayoutManager layoutManager;
-    private List<UserData> userDatas;
+    private List<UserEntity> userDatas;
+    private List<TitleEntity> titleData;
+    private List<MenuEntity> menuData;
 
 
     @Override
@@ -61,9 +71,29 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
 
         //设置banner布局，主要用于显示用户信息以及相关状态按钮
         BannerAdapter bannerAdapter = new BannerAdapter(this, new LinearLayoutHelper(), userDatas,
-                new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 250));
+                new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
         bannerAdapter.setOnBannerViewClick(this);
         adapters.add(bannerAdapter);
+
+
+        LinearLayoutHelper titleLayoutHelper = new LinearLayoutHelper();
+        titleLayoutHelper.setMargin(0, 5, 0, 5);
+
+        adapters.add(new TitleAdapter(this, titleLayoutHelper, titleData,
+                new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 80)));
+
+
+        GridLayoutHelper menuLayoutHelper = new GridLayoutHelper(3);
+        menuLayoutHelper.setAutoExpand(false);
+        menuLayoutHelper.setWeights(new float[]{33, 33, 33});
+        menuLayoutHelper.setAspectRatio(3);
+        menuLayoutHelper.setItemCount(menuData.size());
+        MenuAdapter menuAdapter = new MenuAdapter(this, menuLayoutHelper, menuData,
+                new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500));
+
+        menuAdapter.setItemOnClickListener(this);
+
+        adapters.add(menuAdapter);
 
         delegateAdapter.setAdapters(adapters);
 
@@ -71,11 +101,26 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
     }
 
     private void createUserData() {
-        userDatas = new ArrayList<UserData>();
+        userDatas = new ArrayList<UserEntity>();
 
 
-        userDatas.add(new UserData("杨杨",
+        userDatas.add(new UserEntity("杨杨",
                 "http://up.qqjia.com/z/face01/face06/facejunyong/junyong06.jpg"));
+
+        titleData = new ArrayList<>();
+        titleData.add(new TitleEntity("我的功能", R.drawable.title_image1, R.color.title_white));
+
+
+        menuData = new ArrayList<>();
+
+        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
+        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
+        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
+        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
+        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
+        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
+        menuData.add(new MenuEntity("Vlayout", R.drawable.home, VLayoutActivity.class));
+        menuData.add(new MenuEntity("MainActivity", R.drawable.person, MainActivity.class));
 
     }
 
@@ -94,5 +139,16 @@ public class IndexActivity extends AppCompatActivity implements BannerClickListe
                 break;
 
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int postion) {
+        System.out.println("点击了第" + postion + "行");
+        Log.i("VLayout", "点击了第" + postion + "行");
+
+        Toast.makeText(this, menuData.get(postion - 2).name, Toast.LENGTH_SHORT).show();
+
+        Intent i = new Intent(this,menuData.get(postion - 2).toActivity);
+        startActivity(i);
     }
 }

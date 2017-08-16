@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
+import com.aleaho.vlayout.entity.FunctionEntity;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.GridLayoutHelper;
@@ -19,15 +20,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOnClickListener, BannerClickListener {
+public class MainVLayoutActivity extends AppCompatActivity implements ItemOnClickListener, BannerClickListener {
 
     private RecyclerView workRecyclerView = null;
 
     private VirtualLayoutManager layoutManager = null;
     private List<LayoutHelper> helperList = null;
 
-    List<FunctionBean> oneFuncs;
-    List<FunctionBean> twoFuncs;
+    List<FunctionEntity> oneFuncs;
+    List<FunctionEntity> twoFuncs;
     WorkAdapter workAdapter;
 
     @Override
@@ -72,13 +73,13 @@ public class MainVLayoutActivity extends AppCompatActivity implements FuncItemOn
     }
 
     private void initData() {
-        oneFuncs = new ArrayList<FunctionBean>();
-        twoFuncs = new ArrayList<FunctionBean>();
+        oneFuncs = new ArrayList<FunctionEntity>();
+        twoFuncs = new ArrayList<FunctionEntity>();
 
 
         for (int i = 0; i < 8; i++) {
-            oneFuncs.add(new FunctionBean("私人服务", R.drawable.home));
-            twoFuncs.add(new FunctionBean("公司服务", R.drawable.person));
+            oneFuncs.add(new FunctionEntity("私人服务", R.drawable.home));
+            twoFuncs.add(new FunctionEntity("公司服务", R.drawable.person));
         }
     }
 

@@ -1,4 +1,4 @@
-package com.aleaho.vlayout;
+package com.aleaho.vlayout.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aleaho.vlayout.BannerClickListener;
+import com.aleaho.vlayout.R;
+import com.aleaho.vlayout.entity.UserEntity;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
@@ -29,7 +32,7 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
     private LayoutHelper mLayoutHelper;
     private VirtualLayoutManager.LayoutParams mLayoutParams;
     private int mCount = 0;
-    private List<UserData> mData;
+    private List<UserEntity> mData;
 
     private BannerClickListener bannerClickListener;
 
@@ -41,7 +44,7 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
      * @param layoutHelper 显示项目的布局类型
      * @param data         显示项目的数据
      */
-    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserData> data) {
+    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserEntity> data) {
         this(context, layoutHelper, data, new VirtualLayoutManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 300));
     }
 
@@ -53,7 +56,7 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
      * @param data         显示项目的数据
      * @param layoutParams 显示项目的布局信息
      */
-    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserData> data, @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
+    public BannerAdapter(Context context, LayoutHelper layoutHelper, List<UserEntity> data, @NonNull VirtualLayoutManager.LayoutParams layoutParams) {
         this.mContext = context;
         this.mLayoutHelper = layoutHelper;
         this.mData = data;
@@ -82,8 +85,11 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
     @Override
     public void onBindViewHolder(BannerViewHolder holder, int position) {
 
-        UserData ud = mData.get(0);
 
+
+
+        UserEntity ud = mData.get(position);
+//        holder.itemView.setLayoutParams(mLayoutParams);
         holder.tvName.setText(ud.name);
 
         Picasso.with(mContext).load(ud.avatarUrl).resize(80, 80).centerCrop().into(holder.civAvatar);
@@ -106,7 +112,7 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
         private ImageView ivBanner;
         private TextView tvLogout;
         private CircleImageView civAvatar;
-//        private ImageView civAvatar;
+        //        private ImageView civAvatar;
         private TextView tvName;
 
         public BannerViewHolder(View itemView) {
@@ -117,26 +123,27 @@ public class BannerAdapter extends DelegateAdapter.Adapter<BannerAdapter.BannerV
             civAvatar = (CircleImageView) itemView.findViewById(R.id.avatar);
             tvName = (TextView) itemView.findViewById(R.id.nameView);
 
-            tvLogout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    if (bannerClickListener != null) {
+            if (bannerClickListener != null) {
+                civAvatar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        bannerClickListener.onClick(v);
+
+                    }
+                });
+
+                tvLogout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
                         bannerClickListener.onClick(v);
                     }
-                }
-            });
 
-            civAvatar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (bannerClickListener != null) {
-                        bannerClickListener.onClick(v);
-                    }
-                }
-            });
+                });
 
-
+            }
         }
     }
 }

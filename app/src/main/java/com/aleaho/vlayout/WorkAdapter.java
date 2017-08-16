@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aleaho.vlayout.entity.FunctionEntity;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.VirtualLayoutAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
@@ -22,10 +23,10 @@ import java.util.List;
 public class WorkAdapter extends VirtualLayoutAdapter {
 
     int oneFuncs, twoFuncs;
-    public List<FunctionBean> oneFunctions;
-    public List<FunctionBean> twoFunctions;
+    public List<FunctionEntity> oneFunctions;
+    public List<FunctionEntity> twoFunctions;
 
-    public FuncItemOnClickListener listener;
+    public ItemOnClickListener listener;
 
     public BannerClickListener bannerClickListener;
 
@@ -35,9 +36,9 @@ public class WorkAdapter extends VirtualLayoutAdapter {
 
 
     public WorkAdapter(@NonNull VirtualLayoutManager layoutManager,
-                       List<FunctionBean> oneFunctions,
-                       List<FunctionBean> twoFunctions,
-                       FuncItemOnClickListener listener,
+                       List<FunctionEntity> oneFunctions,
+                       List<FunctionEntity> twoFunctions,
+                       ItemOnClickListener listener,
                        BannerClickListener bannerClickListener) {
         super(layoutManager);
         this.oneFunctions = oneFunctions;
@@ -80,11 +81,11 @@ public class WorkAdapter extends VirtualLayoutAdapter {
         } else if (holder instanceof FuncViewHolder) {
             if (position > 1 && position < 2 + oneFuncs) {
 
-                FunctionBean fb = oneFunctions.get(position - 2);
+                FunctionEntity fb = oneFunctions.get(position - 2);
                 ((FuncViewHolder) holder).name.setText(fb.name);
                 ((FuncViewHolder) holder).image.setImageResource(fb.image);
             } else if (position > 2 + oneFuncs) {
-                FunctionBean fb = twoFunctions.get(position - 2 - 1 - oneFunctions.size());
+                FunctionEntity fb = twoFunctions.get(position - 2 - 1 - oneFunctions.size());
                 ((FuncViewHolder) holder).name.setText(fb.name);
                 ((FuncViewHolder) holder).image.setImageResource(fb.image);
             }
@@ -166,15 +167,15 @@ public class WorkAdapter extends VirtualLayoutAdapter {
             super(view);
             name = (TextView) view.findViewById(R.id.function_name);
             image = (ImageView) view.findViewById(R.id.function_image);
+            if (listener != null)
+                view.setOnClickListener(new View.OnClickListener() {
 
-            view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                @Override
-                public void onClick(View v) {
-                    if (listener != null)
                         listener.onItemClick(v, getAdapterPosition());
-                }
-            });
+                    }
+                });
         }
 
         public TextView getText() {
